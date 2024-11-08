@@ -15,6 +15,9 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
+load_dotenv()
+channel_notice = int(os.getenv('CHANNEL_NOTICE')) #Уведомления
+channel_id = int(os.getenv('CHANNEL_POST')) #посты
 permission_roles = ["Казначей", "Модератор", "Офицер", 'Зам. гильд мастера', "Гильд мастер"]
 
 class CustomHelpCommand(commands.HelpCommand):
@@ -134,8 +137,7 @@ async def send(ctx, *args):
     database.update_user(own.id, server, grade*-1)
     database.update_user(member.id, server, grade)
 
-    channel_id = 1304408106687791134
-    channel = bot.get_channel(channel_id)
+    channel = bot.get_channel(channel_notice)
     all_grade = database.get_grade(server,member)
     await channel.send(f'Пользователь <@{member.id}> получает {grade} очков \nВсего очков:{all_grade}' )
 
@@ -241,8 +243,7 @@ async def start(ctx, *args):
                 # Отправляем уведомление, редактируя оригинальный ответ
             await interaction.followup.send("Пост удален", ephemeral=True)
             return
-        channel_id = 1304408106687791134
-        channel = bot.get_channel(channel_id)
+        channel = bot.get_channel(channel_notice)
         await interaction.response.defer()
         if channel is not None:
             await channel.send(f'Победитель ордера {name_now} {id_now} <@{winner[2]}>')
@@ -266,7 +267,7 @@ async def start(ctx, *args):
     view.add_item(button2)
     view.add_item(button3)
 
-    channel_id = 1304422795849240626
+    
     channel = bot.get_channel(int(channel_id))
     await channel.send(message_content, view=view)
 
@@ -278,6 +279,6 @@ async def start(ctx, *args):
 
 database.first_connection()
 
-load_dotenv()
+
 TOKEN = os.getenv('TOKEN')
 bot.run(TOKEN)
