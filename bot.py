@@ -111,7 +111,7 @@ async def add_player_server(ctx, *args):
 
 @bot.command()
 async def add_player(ctx, *args):
-    roles = list(map(lambda x: x.name, ctx.aurhoe.roles))
+    roles = list(map(lambda x: x.name, ctx.author.roles))
     perm_role = permission_roles
     if not bool(set(perm_role) & set(roles)):
         print('3')
